@@ -31,7 +31,7 @@ function displayManagerOptions() {
 				viewForSale();
 
 			} if (managerChoice.choice === 'View Low Inventory') {
-				console.log('option View Low Inventory');
+				viewLowInv();
 
 			} if (managerChoice.choice === 'Add to Inventory') {
 				console.log('option Add to Inventory');
@@ -56,6 +56,24 @@ function viewForSale() {
 			console.log(`Price: $${row.price} \n Product ID: ${row.item_id} \n Remaining Quantity: ${row.stock_quantity}`);
 			console.log('');
 		};
+		displayManagerOptions();
+	})
+};
+
+function viewLowInv() {
+	connection.query('SELECT * FROM products', function(err, results) {
+		if (err) throw err;
+		let row;
+		for (let i = 0; i < results.length; i++) {
+			row = results[i];
+			if (row.stock_quantity < 5) {
+				console.log('');
+				console.log(`Product: ${row.product_name}`);
+				console.log(`Product ID: ${row.item_id} \n ****Remaining Quantity: ${row.stock_quantity}****`);
+				console.log('');
+			}
+		}
+		console.log('^If low inventory levels exist they will be listed above^')
 		displayManagerOptions();
 	})
 };
