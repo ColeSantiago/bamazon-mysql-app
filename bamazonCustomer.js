@@ -123,4 +123,4 @@ function updateProduct(stock_quantity, item_id) {
 			if (err) throw err;
 		}
 	)
-}
+};
