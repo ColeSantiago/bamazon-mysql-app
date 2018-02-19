@@ -26,7 +26,7 @@ function displayProducts() {
 
 		for (let i = 0; i < results.length; i++) {
 			let row = results[i];
-			console.log(`Product ID: ${row.item_id} \n ${row.product_name} \n Price: $${row.price} \n`);
+			console.log(`${row.product_name} \n Price: $${row.price} \n Product ID: ${row.item_id} \n`);
 		};
 		startPurchase();
 	});
@@ -64,6 +64,7 @@ function startPurchase() {
 		])
 		.then(function(answer) {
 			let chosenId = parseInt(answer.productId);
+			let chosenQuantity = parseInt(answer.quantity);
 			let chosenProduct;
 			for(let i = 0; i < results.length; i++) {
 				if (results[i].item_id === chosenId) {
@@ -71,7 +72,36 @@ function startPurchase() {
 				}
 			}
 
-			console.log(chosenProduct);	
+			if (chosenQuantity <= chosenProduct.stock_quantity) {
+				let total = chosenProduct.price * chosenQuantity;
+				inquirer
+					.prompt([
+						{
+							name: 'confirm',
+							type: 'confirm',
+							message: `You ordered ${chosenQuantity} ${chosenProduct.product_name}(s). Is this correct?`,
+							default: true
+						},
+					])
+					.then(function(userConfirm) {
+						if (userConfirm.confirm) {
+							console.log(`Great! Your total is $${total}`);
+							connection.end();
+						} else {
+							console.log('***************************');
+							console.log('Please try your order again');
+							console.log('***************************');
+							console.log('');
+							displayProducts();
+						}
+					})
+			} else {
+				console.log('**********************');
+				console.log('Insufficient quantity!');
+				console.log('**********************');
+				console.log('');
+				displayProducts();
+			}
 		})
 	})
 };
