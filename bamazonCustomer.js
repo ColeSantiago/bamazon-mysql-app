@@ -73,7 +73,8 @@ function startPurchase() {
 			}
 
 			if (chosenQuantity <= chosenProduct.stock_quantity) {
-				let total = chosenProduct.price * chosenQuantity;
+				let totalPrice = chosenProduct.price * chosenQuantity;
+				let totalStock = chosenProduct.stock_quantity - chosenQuantity;
 				inquirer
 					.prompt([
 						{
@@ -85,7 +86,8 @@ function startPurchase() {
 					])
 					.then(function(userConfirm) {
 						if (userConfirm.confirm) {
-							console.log(`Great! Your total is $${total}`);
+							updateProduct(totalStock, chosenProduct.item_id);
+							console.log(`Great! Your total is $${totalPrice}`);
 							connection.end();
 						} else {
 							console.log('***************************');
@@ -105,3 +107,20 @@ function startPurchase() {
 		})
 	})
 };
+
+function updateProduct(stock_quantity, item_id) {
+	connection.query(
+		'UPDATE products SET ? WHERE ?',
+		[
+			{
+				stock_quantity: stock_quantity
+			},
+			{
+				item_id: item_id
+			}
+		],
+		function(err, results) {
+			if (err) throw err;
+		}
+	)
+}
