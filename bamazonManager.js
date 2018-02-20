@@ -37,7 +37,7 @@ function displayManagerOptions() {
 				addInv();
 
 			} if (managerChoice.choice === 'Add New Product') {
-				console.log('option Add New Product');
+				addProduct();
 
 			} if (managerChoice.choice === 'Exit') {
 				connection.end();
@@ -88,7 +88,7 @@ function addInv() {
 				type: 'input',
 				message: 'What is the product ID of the item you would like to add inventory to?',
 				validate: function(value) {
-			          if (isNaN(value) === false && value > 0 && value < 11 && value % 1 === 0) {
+			          if (isNaN(value) === false && value > 0 && value < results.length + 1 && value % 1 === 0) {
 			            return true;
 			          }
 			          console.log('Please input a valid number.');
@@ -141,4 +141,61 @@ function updateInv(quantity, item_id) {
 		}
 	)
 };
+
+function addProduct() {
+	inquirer
+		.prompt([
+			{
+				type: 'input',
+				name: 'product',
+				message: 'What is the product name?'
+			},
+			{
+				type: 'input',
+				name: 'department',
+				message: 'What department does the product belong to?'
+			},
+			{
+				type: 'input',
+				name: 'price',
+				message: 'What is the price of the product?',
+				validate: function(value) {
+          			if (isNaN(value) === false) {
+            			return true;
+          			}
+          			console.log('Please input a valid number.');
+          			return false;
+        		}
+			},
+			{
+				type: 'input',
+				name: 'quantity',
+				message: 'Product quantity?',
+				validate: function(value) {
+          			if (isNaN(value) === false) {
+            			return true;
+          			}
+          			console.log('Please input a valid number.');
+          			return false;
+        		}
+			}
+		])
+		.then(function(response) {
+			connection.query(
+				'INSERT INTO products SET ?',
+				{
+					product_name: response.product,
+					department_name: response.department,
+					price: response.price,
+					stock_quantity: response.quantity
+				},
+				function(err) {
+					if (err) throw err;
+					console.log('Your product was successfully added!');
+					displayManagerOptions();
+				})
+		})
+};
+
+
 
