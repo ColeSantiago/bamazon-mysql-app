@@ -59,7 +59,7 @@ function viewProductsByDep() {
 					    department_id: results[i].department_id,
 					    department_name: results[i].department_name,
 					    over_head_costs: results[i].over_head_costs,
-					    product_sales: sales[i],
+					    product_sales: JSON.stringify(sales[i]),
 					    total_profit: results[i].total_profit
 					  }
 					]);

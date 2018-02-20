@@ -52,7 +52,7 @@ VALUES ('Firefly: The Game', 'Games', 49.99, 50);
 -- ------------------------------------------------------------------------
 
 INSERT INTO departments (department_name, over_head_costs)
-VALUES ('Toys', 1000);
+VALUES ('Games', 1000);
 
 INSERT INTO departments (department_name, over_head_costs)
-VALUES ('Games', 3000);
+VALUES ('Toys', 3000);
