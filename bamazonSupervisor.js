@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
-const table = require('table');
+const cTable = require('console.table');
 
 const connection = mysql.createConnection({
 	host: 'localhost',
@@ -27,56 +27,46 @@ function displaySupervisorOptions() {
 			},
 		])
 		.then(function(supervisorChoice) {
-			if (supervisorChoice.choice === 'View Product Sales by Department') {
+			switch (supervisorChoice.choice) {
+				case 'View Product Sales by Department':
 				viewProductsByDep();
+				break;
 
-			} if (supervisorChoice.choice === 'Create New Department') {
+				case 'Create New Department':
 				createDepartment();
+				break;
 
-			} if (supervisorChoice.choice === 'Exit') {
+				case 'Exit':
 				connection.end();
 			}
 		});	
 };
 
 function viewProductsByDep() {
-	let config,
-	    data,
-	    output;
-	 
-	data = [
-	    ['0A', '0B', '0C'],
-	    ['1A', '1B', '1C'],
-	    ['2A', '2B', '2C']
-	];
-	 
-	config = {
-	    border: {
-	        topBody: `─`,
-	        topJoin: `┬`,
-	        topLeft: `┌`,
-	        topRight: `┐`,
-	 
-	        bottomBody: `─`,
-	        bottomJoin: `┴`,
-	        bottomLeft: `└`,
-	        bottomRight: `┘`,
-	 
-	        bodyLeft: `│`,
-	        bodyRight: `│`,
-	        bodyJoin: `│`,
-	 
-	        joinBody: `─`,
-	        joinLeft: `├`,
-	        joinRight: `┤`,
-	        joinJoin: `┼`
-	    }
-	};
-	 
-	output = table.table(data, config);
-	 
-	console.log(output);
-	displaySupervisorOptions();
+	connection.query('SELECT SUM(product_sales) FROM products GROUP BY department_name',
+		function(err, sales) {
+			if (err) throw err;
+			console.log(sales);
+			
+		connection.query('SELECT * FROM departments', 
+			function(err, results) {
+				if (err) throw err;
+				// console.log(results);
+
+				for (let i = 0; i < results.length; i++) {
+					console.table([
+					  {
+					    department_id: results[i].department_id,
+					    department_name: results[i].department_name,
+					    over_head_costs: results[i].over_head_costs,
+					    product_sales: sales[i],
+					    total_profit: results[i].total_profit
+					  }
+					]);
+				};   
+				displaySupervisorOptions();
+		})
+	})
 };
 
 function createDepartment() {

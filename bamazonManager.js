@@ -26,23 +26,29 @@ function displayManagerOptions() {
 			},
 		])
 		.then(function(managerChoice) {
-			if (managerChoice.choice === 'View Products for Sale') {
+			switch (managerChoice.choice) {
+				case 'View Products for Sale':
 				viewForSale();
+				break;
 
-			} if (managerChoice.choice === 'View Low Inventory') {
+				case 'View Low Inventory':
 				viewLowInv();
+				break;
 
-			} if (managerChoice.choice === 'Add to Inventory') {
+				case 'Add to Inventory':
 				addInv();
+				break;
 
-			} if (managerChoice.choice === 'Add New Product') {
+				case 'Add New Product':
 				addProduct();
+				break;
 
-			} if (managerChoice.choice === 'Exit') {
+				case 'Exit':
 				connection.end();
-			}
-		})
-}
+				break;
+			};
+		});
+};
 
 function viewForSale() {
 	connection.query('SELECT * FROM products', function(err, results) {

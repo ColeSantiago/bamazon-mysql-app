@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/ColeSantiago/bamazon-mysql-app#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^5.1.0",
-    "mysql": "^2.15.0",
-    "table": "^4.0.2"
+    "mysql": "^2.15.0"
   }
 }
