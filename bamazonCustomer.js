@@ -75,6 +75,7 @@ function startPurchase() {
 			if (chosenQuantity <= chosenProduct.stock_quantity) {
 				let totalPrice = chosenProduct.price * chosenQuantity;
 				let totalStock = chosenProduct.stock_quantity - chosenQuantity;
+				let productSales = totalPrice + chosenProduct.product_sales;
 				inquirer
 					.prompt([
 						{
@@ -86,7 +87,8 @@ function startPurchase() {
 					])
 					.then(function(userConfirm) {
 						if (userConfirm.confirm) {
-							updateProduct(totalStock, chosenProduct.item_id);
+							updateProductQuantity(totalStock, chosenProduct.item_id);
+							updateProductSales(productSales, chosenProduct.item_id);
 							console.log(`Great! Your total is $${totalPrice}`);
 							connection.end();
 						} else {
@@ -108,12 +110,29 @@ function startPurchase() {
 	})
 };
 
-function updateProduct(stock_quantity, item_id) {
+function updateProductQuantity(stock_quantity, item_id) {
 	connection.query(
 		'UPDATE products SET ? WHERE ?',
 		[
 			{
 				stock_quantity: stock_quantity
+			},
+			{
+				item_id: item_id
+			}
+		],
+		function(err, results) {
+			if (err) throw err;
+		}
+	)
+};
+
+function updateProductSales(product_sales, item_id) {
+	connection.query(
+		'UPDATE products SET ? WHERE ?',
+		[
+			{
+				product_sales: product_sales
 			},
 			{
 				item_id: item_id
