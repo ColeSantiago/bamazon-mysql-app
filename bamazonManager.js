@@ -26,7 +26,6 @@ function displayManagerOptions() {
 			},
 		])
 		.then(function(managerChoice) {
-			console.log(managerChoice.choice);
 			if (managerChoice.choice === 'View Products for Sale') {
 				viewForSale();
 
@@ -196,6 +195,3 @@ function addProduct() {
 				})
 		})
 };
-
-
-

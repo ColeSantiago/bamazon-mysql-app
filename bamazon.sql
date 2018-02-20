@@ -49,3 +49,10 @@ VALUES ('Patchwork', 'Games', 24.99, 70);
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ('Firefly: The Game', 'Games', 49.99, 50);
 
+-- ------------------------------------------------------------------------
+
+INSERT INTO departments (department_name, over_head_costs)
+VALUES ('Toys', 1000);
+
+INSERT INTO departments (department_name, over_head_costs)
+VALUES ('Games', 3000);
