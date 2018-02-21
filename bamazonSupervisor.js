@@ -43,29 +43,32 @@ function displaySupervisorOptions() {
 };
 
 function viewProductsByDep() {
-	connection.query('SELECT SUM(product_sales) FROM products GROUP BY department_name',
+	connection.query('SELECT SUM(product_sales) AS totalSales FROM products GROUP BY department_name',
 		function(err, sales) {
 			if (err) throw err;
-			console.log(sales);
-			
-		connection.query('SELECT * FROM departments', 
-			function(err, results) {
-				if (err) throw err;
-				// console.log(results);
+	connection.query('SELECT SUM(over_head_costs) AS totalOverHead FROM departments GROUP BY department_name',
+		function(err, overHead) {
+			if (err) throw err;		
+	connection.query('SELECT * FROM departments', 
+		function(err, results) {
+			if (err) throw err;
+			// console.log(results);
 
-				for (let i = 0; i < results.length; i++) {
-					console.table([
-					  {
-					    department_id: results[i].department_id,
-					    department_name: results[i].department_name,
-					    over_head_costs: results[i].over_head_costs,
-					    product_sales: JSON.stringify(sales[i]),
-					    total_profit: results[i].total_profit
-					  }
-					]);
-				};   
-				displaySupervisorOptions();
-		})
+			for (let i = 0; i < results.length; i++) {
+				
+				console.table([
+					{
+					  department_id: results[i].department_id,
+					  department_name: results[i].department_name,
+					  over_head_costs: '$' + results[i].over_head_costs,
+					  product_sales: '$' + JSON.stringify(sales[i].totalSales),
+					  total_profit: '$' + parseInt(sales[i].totalSales - overHead[i].totalOverHead)
+					}
+				]);
+			};   
+			displaySupervisorOptions();
+	})
+	})
 	})
 };
 
@@ -76,13 +79,26 @@ function createDepartment() {
 				type: 'input',
 				name: 'department',
 				message: 'What is the new department name?'
+			},
+			{
+				type: 'input',
+				name: 'overHead',
+				message: 'What is the over head cost of the department?',
+				validate: function(value) {
+          			if (isNaN(value) === false) {
+            			return true;
+          			}
+          			console.log('Please input a valid number.');
+          			return false;
+        		}
 			}
 		])
 		.then(function(response) {
 			connection.query(
-				'INSERT INTO products SET ?',
+				'INSERT INTO departments SET ?',
 				{
 					department_name: response.department,
+					over_head_costs: response.overHead
 				},
 				function(err) {
 					if (err) throw err;
