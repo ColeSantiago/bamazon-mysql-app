@@ -16,7 +16,8 @@ connection.connect(function(err) {
 	displaySupervisorOptions();
 });
 
-function displaySupervisorOptions() {
+// opening menu when the app starts. Whatever option they choose the corresponding function will be called
+displaySupervisorOptions = () => {
 	inquirer
 		.prompt([
 			{
@@ -42,8 +43,12 @@ function displaySupervisorOptions() {
 		});	
 };
 
-function viewProductsByDep() {
-	let sql = 'SELECT SUM(product_sales) AS totalSales, SUM(product_sales) - over_head_costs AS totalProfit, department_id, over_head_costs FROM products INNER JOIN departments ON products.department_name = departments.department_name GROUP BY departments.department_name'
+// The function gets the sum of the products and the difference of their over head costs by groups, as well as other labeling
+// information from both tables on the database and inserts it all into a table on the console
+viewProductsByDep = () => {
+	let sql = 'SELECT SUM(product_sales) AS totalSales, SUM(product_sales) - over_head_costs AS totalProfit, \
+	department_id, over_head_costs, product_name, price FROM products INNER JOIN departments ON products.department_name = \
+	departments.department_name GROUP BY departments.department_name'
 	connection.query(sql, function(err, results) {
 		console.log(results);
 	
@@ -62,7 +67,8 @@ function viewProductsByDep() {
 	})		
 };
 
-function createDepartment() {
+// prompts the users all of the questions to add a new department to the database
+createDepartment = () => {
 	inquirer
 		.prompt([
 			{
@@ -83,6 +89,7 @@ function createDepartment() {
         		}
 			}
 		])
+		// validates the answers and sends them to the database, and notifies the user
 		.then(function(response) {
 			connection.query(
 				'INSERT INTO departments SET ?',

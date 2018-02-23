@@ -15,7 +15,8 @@ connection.connect(function(err) {
 	displayProducts();
 });
 
-function displayProducts() {
+// Displays all products on the database
+displayProducts = () => {
 	connection.query('SELECT * FROM products', function(err, results) {
 		if (err) throw err;
 		// console.log(results);
@@ -32,7 +33,8 @@ function displayProducts() {
 	});
 };
 
-function startPurchase() {
+// prompts for the user to select their product, validating each response to make sure it is in the correct format
+startPurchase = () => {
 	connection.query("SELECT * FROM products", function(err, results) {
 		if (err) throw err;
 
@@ -63,6 +65,7 @@ function startPurchase() {
 			}
 		])
 		.then(function(answer) {
+			// changing the responses to intergers and finding the current stock quantity of the item being purchased
 			let chosenId = parseInt(answer.productId);
 			let chosenQuantity = parseInt(answer.quantity);
 			let chosenProduct;
@@ -71,7 +74,7 @@ function startPurchase() {
 					chosenProduct = results[i];
 				}
 			}
-
+			// if there is enough stock the user is asked to confirm their purchase
 			if (chosenQuantity <= chosenProduct.stock_quantity) {
 				let totalPrice = chosenProduct.price * chosenQuantity;
 				let totalStock = chosenProduct.stock_quantity - chosenQuantity;
@@ -85,12 +88,14 @@ function startPurchase() {
 							default: true
 						},
 					])
+					// if their order is correct the total is given, the database update function goes through, and the connection is ended
 					.then(function(userConfirm) {
 						if (userConfirm.confirm) {
 							updateProductQuantity(totalStock, chosenProduct.item_id);
 							updateProductSales(productSales, chosenProduct.item_id);
 							console.log(`Great! Your total is $${totalPrice}`);
 							connection.end();
+						// if their order is not correct
 						} else {
 							console.log('***************************');
 							console.log('Please try your order again');
@@ -99,6 +104,7 @@ function startPurchase() {
 							displayProducts();
 						}
 					})
+			// if there is not enough stock of the item they want
 			} else {
 				console.log('**********************');
 				console.log('Insufficient quantity!');
@@ -110,7 +116,8 @@ function startPurchase() {
 	})
 };
 
-function updateProductQuantity(stock_quantity, item_id) {
+// function to update the stock quantity of the item in the database
+updateProductQuantity = (stock_quantity, item_id) => {
 	connection.query(
 		'UPDATE products SET ? WHERE ?',
 		[
@@ -127,7 +134,8 @@ function updateProductQuantity(stock_quantity, item_id) {
 	)
 };
 
-function updateProductSales(product_sales, item_id) {
+// function to update the product sales of the item in the database
+updateProductSales = (product_sales, item_id) => {
 	connection.query(
 		'UPDATE products SET ? WHERE ?',
 		[

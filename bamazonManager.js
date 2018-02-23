@@ -15,7 +15,8 @@ connection.connect(function(err) {
 	displayManagerOptions();
 });
 
-function displayManagerOptions() {
+// opening menu when the app starts. Whatever option they choose the corresponding function will be called
+displayManagerOptions = () => {
 	inquirer
 		.prompt([
 			{
@@ -50,7 +51,8 @@ function displayManagerOptions() {
 		});
 };
 
-function viewForSale() {
+// selects everything for the products table and displays it
+viewForSale = () => {
 	connection.query('SELECT * FROM products', function(err, results) {
 		if (err) throw err;
 
@@ -65,7 +67,8 @@ function viewForSale() {
 	})
 };
 
-function viewLowInv() {
+// if the stock level of an item is below 5, it will be displayed, if not nothing will be displayed
+viewLowInv = () => {
 	connection.query('SELECT * FROM products', function(err, results) {
 		if (err) throw err;
 		let row;
@@ -83,7 +86,8 @@ function viewLowInv() {
 	})
 };
 
-function addInv() {
+// prompts the user asking them what product they would like to update and by how much, validating the answers
+addInv = () => {
 		connection.query("SELECT * FROM products", function(err, results) {
 		if (err) throw err;
 
@@ -113,6 +117,7 @@ function addInv() {
 	        	}
 			}
 		])
+		// changing the inputs to intergers and finding the correct product to update
 		.then(function(answer) {
 			let chosenId = parseInt(answer.productId);
 			let chosenQuantity = parseInt(answer.quantity);
@@ -122,6 +127,7 @@ function addInv() {
 					chosenProduct = results[i];
 				}
 			}
+			// passing the answers to the updats inventory function and notifying the user
 			let quantity = chosenQuantity + chosenProduct.stock_quantity
 			updateInv(quantity, chosenProduct.item_id);
 			console.log('Inventory Updated!');
@@ -130,7 +136,8 @@ function addInv() {
 	});
 };
 
-function updateInv(quantity, item_id) {
+// function to update the stock quantity of the item in the database
+updateInv = (quantity, item_id) => {
 		connection.query(
 		'UPDATE products SET ? WHERE ?',
 		[
@@ -147,7 +154,8 @@ function updateInv(quantity, item_id) {
 	)
 };
 
-function addProduct() {
+// prompts the user all the questions to add a product
+addProduct = () => {
 	inquirer
 		.prompt([
 			{
@@ -185,6 +193,7 @@ function addProduct() {
         		}
 			}
 		])
+		// the answers are validated and then sent to the database
 		.then(function(response) {
 			connection.query(
 				'INSERT INTO products SET ?',
