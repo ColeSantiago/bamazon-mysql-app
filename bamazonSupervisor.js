@@ -47,16 +47,15 @@ displaySupervisorOptions = () => {
 // information from both tables on the database and inserts it all into a table on the console
 viewProductsByDep = () => {
 	let sql = 'SELECT SUM(product_sales) AS totalSales, SUM(product_sales) - over_head_costs AS totalProfit, \
-	department_id, over_head_costs, product_name, price FROM products INNER JOIN departments ON products.department_name = \
+	department_id, over_head_costs, departments.department_name FROM products INNER JOIN departments ON products.department_name = \
 	departments.department_name GROUP BY departments.department_name'
 	connection.query(sql, function(err, results) {
-		console.log(results);
 	
 		for (let i = 0; i < results.length; i++) {
 				console.table([
 					{
 						department_id: results[i].department_id,
-						// department_name: results[i].departmentName,
+						department_name: results[i].department_name,
 						over_head_costs: results[i].over_head_costs,
 						product_sales: results[i].totalSales,
 						total_profits: results[i].totalProfit
