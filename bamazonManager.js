@@ -93,7 +93,7 @@ function addInv() {
 				type: 'input',
 				message: 'What is the product ID of the item you would like to add inventory to?',
 				validate: function(value) {
-			          if (isNaN(value) === false && value > 0 && value < results.length + 1 && value % 1 === 0) {
+			          if (isNaN(value) === false && value > 0 && value % 1 === 0) {
 			            return true;
 			          }
 			          console.log('Please input a valid number.');
