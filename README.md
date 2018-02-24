@@ -14,10 +14,6 @@ This app can be run from three different files:
 
 --------------------
 
-The video below goes through the entire app:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2-9BzX-y4o8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
 When **bamazonCustomer.js** is run, all of the available products from the database are shown with their names, prices, and id numbers.
 
 The customer is asked to pick the id number of what they would like to buy, and then the quantity. After confirming that their order is correct, the total is shown and the order is completed.
@@ -68,3 +64,9 @@ Finally, when **bamazonSupervisor.js** is run, a menu of three options will appe
 3. Exit
 --------------
 *  Will end the connction and allow the user to exit the app.
+
+---------------
+
+The video below goes through the entire app:
+
+[![bamazon app demo](demo.png)](https://www.youtube.com/embed/2-9BzX-y4o8 "Bamazon App Demo")
