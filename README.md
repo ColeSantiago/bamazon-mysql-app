@@ -69,4 +69,4 @@ Finally, when **bamazonSupervisor.js** is run, a menu of three options will appe
 
 The video below goes through the entire app:
 
-[![bamazon app demo](bamazon-mysql-app/image/demo.png)](https://www.youtube.com/embed/2-9BzX-y4o8 "Bamazon App Demo")
+[![bamazon app demo](../bamazon-mysql-app/image/demo.png)](https://www.youtube.com/embed/2-9BzX-y4o8 "Bamazon App Demo")
